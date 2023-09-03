@@ -3,6 +3,8 @@ import { BrowserWindow, app } from "electron";
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
       preload: path.resolve(__dirname, "preload.js"),
     },
