@@ -5,7 +5,7 @@ import { Header } from '../header'
 const Home: React.FC = () => {
   return (
     <div>
-      <h1>hello world</h1>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
       <ul>
         <li><Link to="/">ホーム</Link></li>
         <li><Link to="/counter">記事一覧</Link></li>

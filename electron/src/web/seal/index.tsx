@@ -1,6 +1,4 @@
 import React from "react";
-import "./Test.scss"
-
 export const Seal = () => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
@@ -12,8 +10,11 @@ export const Seal = () => {
 
   React.useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext();
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "red"
     ctx.beginPath();
     ctx.arc(75, 75, 75, 0, Math.PI * 2, true); // 外の円
+    // ctx.arc(100, 100, 50, 0 * Math.PI / 180, 360 * Math.PI / 180, false)
     // ctx.moveTo(110, 75);
     ctx.font = "24px serif";
     ctx.textAlign = "center"
@@ -27,14 +28,14 @@ export const Seal = () => {
 
     ctx.font = "12px serif";
     ctx.textAlign = "center"
-    ctx.fillText("2023/09/04", 75, 80);
+    ctx.fillText(new Date().toLocaleDateString(), 75, 80);
     ctx.stroke();
   })
 
   return (
     <div className="top-4">
       <button onClick={() => {
-        const canvas = getContext();
+        console.log("e")
         const png = (canvasRef.current?.toDataURL("image/png") || "").replace(/^.*,/, '')
         //. バイナリ変換
         const bin = atob(png);
@@ -49,12 +50,30 @@ export const Seal = () => {
             'image/png': blob
           })
         ]).then(() => {
+          if (Notification.permission === "granted") {
+            // 通知権限が既に付与されているかどうかを調べる。
+            // そうであれば、通知を作成
+            const notification = new Notification("コピーしました");
+
+          } else if (Notification.permission !== "denied") {
+            // ユーザーにその権限を要求する必要がある
+            Notification.requestPermission().then((permission) => {
+              // ユーザーが許可したら、通知を作成
+              if (permission === "granted") {
+                const notification = new Notification("コピーしました");
+                // …
+              }
+            });
+          }
         }).catch(e => {
           alert(e)
           console.log(e)
         });
       }}>copy</button>
-      <canvas className="canvas" ref={canvasRef} />
+
+      <div>
+        <canvas className="canvas" width="150" height="150" ref={canvasRef} />
+      </div>
     </div>
   );
 }
