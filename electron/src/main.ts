@@ -73,7 +73,7 @@ ipcMain.handle(IPCKeys.LOAD, (event) => {
 // app.once('window-all-closed', () => app.quit());
 
 const reloadGlobalHotkeySettings = (win: BrowserWindow) => {
-  globalShortcut.register('CommandOrControl+Shift+v', () => {
+  globalShortcut.register('CommandOrControl+b', () => {
     win.webContents.send(IPCKeys.RECEIVE_MESSAGE, 'test message');
   });
 };
