@@ -18,8 +18,6 @@ export const Seal = () => {
     ctx.strokeStyle = 'red';
     ctx.beginPath();
     ctx.arc(30, 30, 30, 0, Math.PI * 2, true); // 外の円
-    // ctx.arc(100, 100, 50, 0 * Math.PI / 180, 360 * Math.PI / 180, false)
-    // ctx.moveTo(110, 75);
     ctx.font = '12px serif';
     ctx.textAlign = 'center';
     ctx.clearRect(0, 0, 150, 150);
