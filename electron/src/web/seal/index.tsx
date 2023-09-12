@@ -12,6 +12,10 @@ export const Seal = () => {
     return canvas.getContext('2d');
   };
 
+  const [top, setTop] = React.useState('');
+  const [date, setDate] = React.useState(new Date());
+  const [lower, setLower] = React.useState('');
+
   React.useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext();
     ctx.fillStyle = 'red';
@@ -32,11 +36,7 @@ export const Seal = () => {
     ctx.textAlign = 'center';
     ctx.fillText(date.toLocaleDateString(), 30, 33);
     ctx.stroke();
-  });
-
-  const [top, setTop] = React.useState('');
-  const [date, setDate] = React.useState(new Date());
-  const [lower, setLower] = React.useState('');
+  }, [top, lower]);
 
   React.useEffect(() => {
     const test = async () => {
@@ -66,6 +66,7 @@ export const Seal = () => {
     <>
       <div className="grid gap-6 mb-6 md:grid-cols-1 h-full bg-gray-400">
         <div className="ml-2 mr-2 mt-2 gap-4 flex flex-col">
+          <div></div>
           <div>
             <label
               htmlFor="top"
@@ -140,12 +141,7 @@ export const Seal = () => {
             ref={ref}
             className="mx-auto items-center flex justify-center mb-4 bg-white p-2"
           >
-            <canvas
-              className="canvas"
-              width="60"
-              height="60"
-              ref={canvasRef}
-            />
+            <canvas className="canvas" width="60" height="60" ref={canvasRef} />
           </div>
         </div>
       </div>
