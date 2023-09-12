@@ -1,19 +1,13 @@
-import { useState } from "react";
-import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Counter } from "./counter";
-import Home from "./home";
-import { Header } from "./header";
-import { Seal } from "./seal";
-import "./App.css"
+import { BrowserRouter } from "react-router-dom";
 import "tailwindcss/tailwind.css";
+import "./App.css";
+import { Seal } from "./seal";
 
 export const App = () => {
 
   return (
     <BrowserRouter>
-      <Header />
+      <Seal />
     </BrowserRouter>
   );
 };
-
