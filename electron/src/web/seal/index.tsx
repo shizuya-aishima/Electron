@@ -36,7 +36,7 @@ export const Seal = () => {
     ctx.textAlign = 'center';
     ctx.fillText(date.toLocaleDateString(), 30, 33);
     ctx.stroke();
-  }, [top, lower]);
+  }, [top, lower, date]);
 
   React.useEffect(() => {
     const test = async () => {
