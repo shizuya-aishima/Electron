@@ -4,8 +4,9 @@
     "source.fixAll.eslint": true,
     "source.fixAll.stylelint": true
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": false,
+  "typescript.format.enable": false, // 組み込みのフォーマッターは無効にする
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // Prettier を使う
+  "editor.formatOnSave": true,
   "[graphql]": {
     "editor.formatOnSave": true
   },
@@ -34,13 +35,11 @@
   "scss.validate": false,
   "npm.packageManager": "yarn",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": "electron/electron/node_modules/typescript/lib",
-  "eslint.workingDirectories": [
-    "./electron"
-  ],
+  "typescript.tsdk": "/workspaces/electron/electron/node_modules/typescript/lib",
+  "eslint.workingDirectories": ["./electron"],
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "jest.rootPath": "electron",
-  "jest.jestCommandLine": "yarn test",
+  "jest.jestCommandLine": "yarn test"
 }

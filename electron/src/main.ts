@@ -24,7 +24,7 @@ const showNotification = () => {
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 420,
-    height: 650,
+    height: 700,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
