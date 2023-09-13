@@ -15,7 +15,7 @@
     "build": "rimraf dist && cross-env NODE_ENV=\"production\" webpack --progress",
     "dev:webpack": "cross-env NODE_ENV=\"development\" webpack --progress",
     "dev:electron": "wait-on dist/main.js dist/index.html && electronmon .",
-    "build:win": "electron-packager . --platform=win32 --arch=x64 --overwrite",
+    "build:win": "yarn build && electron-packager . --platform=win32 --arch=x64 --overwrite",
     "lint:es": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "eslintConfig": {
