@@ -23,10 +23,10 @@ export const Seal = () => {
     ctx.lineWidth = 2
     ctx.beginPath();
     ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
-    ctx.font = "bold 16px 'ＭＳ ゴシック'";
+    ctx.font = "bold 14px 'メイリオ'";
     ctx.textAlign = 'center';
     ctx.clearRect(0, 0, 150, 150);
-    ctx.fillText(top, 30, 22);
+    ctx.fillText(top, 30, 20);
     ctx.fillText(lower, 30, 51);
     ctx.moveTo(58, 24);
     ctx.lineTo(2, 24);
