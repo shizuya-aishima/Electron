@@ -9,7 +9,7 @@
     "jsx": "react-jsx",
     "strict": true
   },
-  "include": ["src"],
+  "include": ["src", "postcss.config.js"],
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"

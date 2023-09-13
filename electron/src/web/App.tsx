@@ -1,14 +1,12 @@
-import { useState } from "react";
-import "./App.css";
+import { BrowserRouter } from 'react-router-dom';
+import 'tailwindcss/tailwind.css';
+import './App.css';
+import { Seal } from './seal';
 
 export const App = () => {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="container">
-      <h1>{count}</h1>
-      <button onClick={() => setCount((count) => count + 1)}>Count</button>
-      <button onClick={() => setCount(() => 0)}>Reset</button>
-    </div>
+    <BrowserRouter>
+      <Seal />
+    </BrowserRouter>
   );
 };
