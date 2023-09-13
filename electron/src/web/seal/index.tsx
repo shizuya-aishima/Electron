@@ -20,17 +20,18 @@ export const Seal = () => {
     const ctx: CanvasRenderingContext2D = getContext();
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2
     ctx.beginPath();
-    ctx.arc(30, 30, 30, 0, Math.PI * 2, true); // 外の円
-    ctx.font = '12px serif';
+    ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
+    ctx.font = '17px serif';
     ctx.textAlign = 'center';
     ctx.clearRect(0, 0, 150, 150);
-    ctx.fillText(top, 30, 15);
-    ctx.fillText(lower, 30, 50);
-    ctx.moveTo(60, 24);
-    ctx.lineTo(0, 24);
-    ctx.moveTo(60, 36);
-    ctx.lineTo(0, 36);
+    ctx.fillText(top, 30, 22);
+    ctx.fillText(lower, 30, 51);
+    ctx.moveTo(58, 24);
+    ctx.lineTo(2, 24);
+    ctx.moveTo(58, 36);
+    ctx.lineTo(2, 36);
 
     ctx.font = '10px serif';
     ctx.textAlign = 'center';
