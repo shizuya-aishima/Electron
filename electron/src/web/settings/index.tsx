@@ -10,8 +10,8 @@ export const Setting = () => {
     // myAPI.setShortcut(shortcut1, shortcut2);
     myAPI.getShortcut().then((data) => {
       console.log(data);
-      setShortcut1(data.shortcut1);
-      setShortcut2(data.shortcut2);
+      setShortcut1(data.shortcut1 || '');
+      setShortcut2(data.shortcut2 || '');
     });
   }, []);
   return (
