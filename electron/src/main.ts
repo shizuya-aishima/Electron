@@ -110,23 +110,38 @@ app.whenReady().then(() => {
     );
   };
 
+  /**
+   * Stampの上段下段の保存
+   */
   ipcMain.on(IPCKeys.SEND_MESSSAGE, (event, top, lower) => {
     saveStamp(top, lower);
   });
 
+  /**
+   * ショートカット画面を開く
+   */
   ipcMain.on(IPCKeys.OPEN_SETTINGS, (event) => {
     createSubWindow();
   });
 
+  /**
+   * 画像をクリップボードに保存
+   */
   ipcMain.on(IPCKeys.SEND_IMAGE, (event, image: string) => {
     clipboard.writeImage(nativeImage.createFromDataURL(image));
     showNotification();
   });
 
+  /**
+   * 設定画面の読み込み
+   */
   ipcMain.handle(IPCKeys.GET_SHORTCUT, (event) => {
     return getShortcut();
   });
 
+  /**
+   * Stamp画面の読み込み
+   */
   ipcMain.handle(IPCKeys.LOAD, (event) => {
     return getStamp();
   });
