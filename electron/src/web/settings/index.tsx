@@ -36,13 +36,6 @@ export const Setting = () => {
             >
               Ctrl
             </label>
-            {/* <input
-              id="key1"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-16 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              value={shortcut1}
-              onChange={(e) => setShortcut1(e.target.value)}
-            /> */}
             <label className="block mb-0 text-sm font-medium text-gray-900 dark:text-white">
               +
             </label>

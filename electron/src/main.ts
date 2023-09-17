@@ -1,6 +1,5 @@
 import {
   BrowserWindow,
-  IpcRendererEvent,
   Menu,
   Notification,
   Tray,
@@ -12,7 +11,6 @@ import {
 } from 'electron';
 import path from 'path';
 import { IPCKeys } from './constants';
-import Store from 'electron-store'; // electron-store利用
 import { getShortcut, getStamp, saveStamp, setShortcut } from './store';
 
 const showNotification = () => {
@@ -121,7 +119,6 @@ app.whenReady().then(() => {
   });
 
   ipcMain.on(IPCKeys.SEND_IMAGE, (event, image: string) => {
-    console.log('IPCKeys.SEND_IMAGE');
     const a = nativeImage.createFromDataURL(image);
     clipboard.writeImage(a);
     showNotification();
@@ -139,7 +136,6 @@ app.whenReady().then(() => {
   ipcMain.on(
     IPCKeys.SET_SHORTCUT,
     (event, shortcut1: string, shortcut2: string) => {
-      console.log(shortcut1, shortcut2);
       setShortcut(shortcut1, shortcut2);
       reloadGlobalHotkeySettings(window, shortcut1, shortcut2);
     },
@@ -157,14 +153,6 @@ app.whenReady().then(() => {
   tray.addListener('click', () => window.show());
   reloadGlobalHotkeySettings(window);
 });
-
-// ipcMain.on(
-//   IPCKeys.SET_SHORTCUT,
-//   (event: Electron.IpcMainEvent, shortcut1: string, shortcut2: string) => {
-//     setShortcut(shortcut1, shortcut2);
-//     reloadGlobalHotkeySettings(window, shortcut1, shortcut2);
-//   },
-// );
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
