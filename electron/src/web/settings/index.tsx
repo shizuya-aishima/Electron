@@ -1,13 +1,11 @@
 import React from 'react';
 
 export const Setting = () => {
-  console.log('test');
   const { myAPI } = window;
   const [shortcut1, setShortcut1] = React.useState('');
   const [shortcut2, setShortcut2] = React.useState('');
 
   React.useEffect(() => {
-    // myAPI.setShortcut(shortcut1, shortcut2);
     myAPI.getShortcut().then((data) => {
       console.log(data);
       setShortcut1(data.shortcut1 || '');
