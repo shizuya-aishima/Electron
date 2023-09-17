@@ -15,7 +15,7 @@ export const getStamp = () => {
 };
 
 export const setShortcut = (shortcut1: string, shortcut2?: string) => {
-  store.set('shortcut.shortcut1-1', shortcut1);
+  store.set('shortcut.shortcut1-1', shortcut1 || 'b');
   store.set('shortcut.shortcut2-1', shortcut2 || '');
 };
 
