@@ -119,8 +119,7 @@ app.whenReady().then(() => {
   });
 
   ipcMain.on(IPCKeys.SEND_IMAGE, (event, image: string) => {
-    const a = nativeImage.createFromDataURL(image);
-    clipboard.writeImage(a);
+    clipboard.writeImage(nativeImage.createFromDataURL(image));
     showNotification();
   });
 
