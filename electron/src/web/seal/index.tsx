@@ -20,7 +20,7 @@ export const Seal = () => {
     const ctx: CanvasRenderingContext2D = getContext();
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
     ctx.font = "bold 14px 'メイリオ'";
@@ -51,6 +51,7 @@ export const Seal = () => {
   React.useEffect(() => {
     // イベントリスナーを追加
     const removeListener = myAPI.onReceiveMessage((message) => {
+      console.log(message);
       myAPI.sendImage(getImage());
     });
     // コンポーネントのクリーンアップ処理でイベントリスナーを削除する
@@ -63,11 +64,37 @@ export const Seal = () => {
     return canvasRef.current?.toDataURL('image/png') || '';
   };
 
+  const openSetting = () => {
+    myAPI.openSettings();
+  };
+
   return (
     <>
       <div className="grid gap-6 mb-6 md:grid-cols-1 h-full bg-gray-400">
-        <div className="ml-2 mr-2 mt-2 gap-4 flex flex-col">
-          <div></div>
+        <div className="ml-2 mr-2 mt-2 gap-2 flex flex-col">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="text-white bg-slate-100 hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={openSetting}
+            >
+              <svg
+                className="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"
+                ></path>
+              </svg>
+            </button>
+          </div>
           <div>
             <label
               htmlFor="top"
@@ -131,7 +158,7 @@ export const Seal = () => {
             copy
           </button>
           <button
-            className="bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+            className="bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-400 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-400 dark:focus:ring-blue-800"
             onClick={() => {
               myAPI.sendMessage(top, lower);
             }}

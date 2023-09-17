@@ -1,6 +1,5 @@
 import {
   BrowserWindow,
-  IpcRendererEvent,
   Menu,
   Notification,
   Tray,
@@ -12,7 +11,7 @@ import {
 } from 'electron';
 import path from 'path';
 import { IPCKeys } from './constants';
-import Store from 'electron-store'; // electron-store利用
+import { getShortcut, getStamp, saveStamp, setShortcut } from './store';
 
 const showNotification = () => {
   new Notification({
@@ -35,10 +34,10 @@ const createWindow = () => {
     icon: __dirname + '/../assets/favicon.png',
   });
 
-  mainWindow.loadFile('dist/index.html');
-  // if (!app.isPackaged) {
-  //   mainWindow.webContents.openDevTools({ mode: 'detach' });
-  // }
+  mainWindow.loadURL(`file://${__dirname}/../dist/index.html#/`);
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
+  }
 
   mainWindow.on('close', (event) => {
     mainWindow.hide();
@@ -49,6 +48,33 @@ const createWindow = () => {
 
   return mainWindow;
 };
+
+const createSubWindow = () => {
+  const subWindow = new BrowserWindow({
+    width: 420,
+    height: 700,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.resolve(__dirname, 'preload.js'),
+    },
+    icon: __dirname + '/../assets/favicon.png',
+  });
+
+  subWindow.loadURL(`file://${__dirname}/../dist/index.html#/sub`);
+  if (!app.isPackaged) {
+    subWindow.webContents.openDevTools({ mode: 'detach' });
+  }
+
+  subWindow.on('close', (event) => {
+    subWindow.hide();
+    if (!isClose) {
+      event.preventDefault();
+    }
+  });
+
+  return subWindow;
+};
 // to handle quitting
 const handleQuit = () => {
   isClose = true;
@@ -58,7 +84,77 @@ const handleQuit = () => {
 };
 
 app.whenReady().then(() => {
-  const mainWindow = createWindow();
+  /**
+   * ショートカットキーの設定
+   * @param win {BrowserWindow} ブラウザ
+   * @param tmpShortcut1 {string} ショートカットキー1
+   * @param tmpShortcut2 {string} ショートカットキー2
+   */
+  const reloadGlobalHotkeySettings = (
+    win: BrowserWindow,
+    tmpShortcut1?: string,
+    tmpShortcut2?: string,
+  ) => {
+    const store = getShortcut();
+    if (tmpShortcut1) {
+      setShortcut(tmpShortcut1, tmpShortcut2);
+    }
+    const shortcut1 = tmpShortcut1 || store.shortcut1;
+    const shortcut2 = tmpShortcut2 ?? store.shortcut2;
+    globalShortcut.unregisterAll();
+    globalShortcut.register(
+      `CommandOrControl+${shortcut1 || 'b'}${shortcut2 ? '+' : ''}${shortcut2}`,
+      () => {
+        win.webContents.send(IPCKeys.RECEIVE_MESSAGE, 'test message');
+      },
+    );
+  };
+
+  /**
+   * Stampの上段下段の保存
+   */
+  ipcMain.on(IPCKeys.SEND_MESSSAGE, (event, top, lower) => {
+    saveStamp(top, lower);
+  });
+
+  /**
+   * ショートカット画面を開く
+   */
+  ipcMain.on(IPCKeys.OPEN_SETTINGS, (event) => {
+    createSubWindow();
+  });
+
+  /**
+   * 画像をクリップボードに保存
+   */
+  ipcMain.on(IPCKeys.SEND_IMAGE, (event, image: string) => {
+    clipboard.writeImage(nativeImage.createFromDataURL(image));
+    showNotification();
+  });
+
+  /**
+   * 設定画面の読み込み
+   */
+  ipcMain.handle(IPCKeys.GET_SHORTCUT, (event) => {
+    return getShortcut();
+  });
+
+  /**
+   * Stamp画面の読み込み
+   */
+  ipcMain.handle(IPCKeys.LOAD, (event) => {
+    return getStamp();
+  });
+
+  const window = createWindow();
+  ipcMain.on(
+    IPCKeys.SET_SHORTCUT,
+    (event, shortcut1: string, shortcut2: string) => {
+      setShortcut(shortcut1, shortcut2);
+      reloadGlobalHotkeySettings(window, shortcut1, shortcut2);
+    },
+  );
+
   const img = nativeImage.createFromPath(__dirname + '/../assets/favicon.png');
   let tray = new Tray(img);
   tray.setToolTip('Tray app');
@@ -68,33 +164,9 @@ app.whenReady().then(() => {
       { label: 'Quit', type: 'normal', click: handleQuit },
     ]),
   );
-  tray.addListener('click', () => mainWindow.show());
-  reloadGlobalHotkeySettings(mainWindow);
+  tray.addListener('click', () => window.show());
+  reloadGlobalHotkeySettings(window);
 });
-
-const store = new Store();
-ipcMain.on(IPCKeys.SEND_MESSSAGE, (event, top, lower) => {
-  store.set('top', top);
-  store.set('lower', lower);
-});
-
-ipcMain.on(IPCKeys.SEND_IMAGE, (event, image: string) => {
-  const a = nativeImage.createFromDataURL(image);
-  clipboard.writeImage(a);
-  showNotification();
-});
-ipcMain.handle(IPCKeys.LOAD, (event) => {
-  const top = store.get('top');
-  const lower = store.get('lower');
-
-  return { top, lower };
-});
-
-const reloadGlobalHotkeySettings = (win: BrowserWindow) => {
-  globalShortcut.register('CommandOrControl+b', () => {
-    win.webContents.send(IPCKeys.RECEIVE_MESSAGE, 'test message');
-  });
-};
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

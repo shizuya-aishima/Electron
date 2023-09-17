@@ -8,6 +8,15 @@ contextBridge.exposeInMainWorld('myAPI', {
   sendMessage: (top: string, lower: string) => {
     ipcRenderer.send(IPCKeys.SEND_MESSSAGE, top, lower);
   },
+  openSettings: () => {
+    ipcRenderer.send(IPCKeys.OPEN_SETTINGS);
+  },
+  setShortcut: (shortcut1: string, shortcut2: string) => {
+    ipcRenderer.send(IPCKeys.SET_SHORTCUT, shortcut1, shortcut2);
+  },
+  getShortcut: async () => {
+    return await ipcRenderer.invoke(IPCKeys.GET_SHORTCUT);
+  },
   sendImage: (image: Blob) => {
     ipcRenderer.send(IPCKeys.SEND_IMAGE, image);
   },
