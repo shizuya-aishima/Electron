@@ -36,4 +36,43 @@ contextBridge.exposeInMainWorld('myAPI', {
       ipcRenderer.removeAllListeners(IPCKeys.RECEIVE_MESSAGE);
     };
   },
+
+  // history
+  // 関数で包んで部分的に公開する
+  // renderer -> main
+  addHistory: (top: string, lower: string) => {
+    ipcRenderer.send(IPCKeys.ADD_HISTORY, top, lower);
+  },
+  // main -> renderer
+  // getHistory: async (): Promise<{ top: string; lower: string }[]> => {
+  //   return await ipcRenderer.invoke(IPCKeys.GET_HISTORY);
+  // },
+  getHistory: (
+    listener: (
+      message: {
+        top: string;
+        lower: string;
+      }[],
+    ) => void,
+  ) => {
+    ipcRenderer.on(
+      IPCKeys.GET_HISTORY,
+      (
+        event: IpcRendererEvent,
+        message: {
+          top: string;
+          lower: string;
+        }[],
+      ) => {
+        console.log('test');
+        listener(message);
+      },
+    );
+    return () => {
+      ipcRenderer.removeAllListeners(IPCKeys.GET_HISTORY);
+    };
+  },
+  getHistoryOnce: async (): Promise<{ top: string; lower: string }[]> => {
+    return await ipcRenderer.invoke(IPCKeys.GET_HISTORY_ONCE);
+  },
 });

@@ -28,9 +28,10 @@ export const getShortcut = () => {
 
 export const createHistory = (top: string, lower: string) => {
   const backHistory = getHistory();
-  const newHistory = backHistory.filter((_, i) => i < 9);
-  [{ top, lower }].concat(newHistory);
-  store.set('history', newHistory);
+  const newHistory = backHistory
+    .filter((data) => JSON.stringify(data) !== JSON.stringify({ top, lower }))
+    .filter((_, i) => i < 9);
+  store.set('history', [{ top, lower }].concat(newHistory));
 };
 
 export const getHistory = () => {

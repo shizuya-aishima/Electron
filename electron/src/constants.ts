@@ -7,4 +7,7 @@ export const IPCKeys = {
   OPEN_SETTINGS: 'openSettings',
   LOAD: 'load',
   SEND_IMAGE: 'send_image',
+  GET_HISTORY: 'getHistory',
+  GET_HISTORY_ONCE: 'getHistoryOnce',
+  ADD_HISTORY: 'addHistory',
 } as const;

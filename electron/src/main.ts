@@ -11,7 +11,14 @@ import {
 } from 'electron';
 import path from 'path';
 import { IPCKeys } from './constants';
-import { getShortcut, getStamp, saveStamp, setShortcut } from './store';
+import {
+  createHistory,
+  getHistory,
+  getShortcut,
+  getStamp,
+  saveStamp,
+  setShortcut,
+} from './store';
 
 const showNotification = () => {
   new Notification({
@@ -62,9 +69,9 @@ const createSubWindow = () => {
   });
 
   subWindow.loadURL(`file://${__dirname}/../dist/index.html#/sub`);
-  if (!app.isPackaged) {
-    subWindow.webContents.openDevTools({ mode: 'detach' });
-  }
+  // if (!app.isPackaged) {
+  //   subWindow.webContents.openDevTools({ mode: 'detach' });
+  // }
 
   subWindow.on('close', (event) => {
     subWindow.hide();
@@ -166,6 +173,21 @@ app.whenReady().then(() => {
   );
   tray.addListener('click', () => window.show());
   reloadGlobalHotkeySettings(window);
+
+  /**
+   * Stampの上段下段の保存
+   */
+  ipcMain.on(IPCKeys.ADD_HISTORY, (event, top, lower) => {
+    createHistory(top, lower);
+    window.webContents.send(IPCKeys.GET_HISTORY, getHistory());
+  });
+
+  /**
+   * 設定画面の読み込み
+   */
+  ipcMain.handle(IPCKeys.GET_HISTORY_ONCE, (event) => {
+    return getHistory();
+  });
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

@@ -72,7 +72,7 @@ export const Seal = () => {
 
   return (
     <>
-      <div className="grid gap-6 mb-6 md:grid-cols-1 h-full bg-gray-400">
+      <div className="grid gap-6 mb-6 md:grid-cols-1 ">
         <div className="ml-2 mr-2 mt-2 gap-2 flex flex-col">
           <div className="flex justify-end">
             <button
@@ -89,9 +89,9 @@ export const Seal = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"
                 ></path>
               </svg>
@@ -163,6 +163,7 @@ export const Seal = () => {
             className="bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-400 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-400 dark:focus:ring-blue-800"
             onClick={() => {
               myAPI.sendMessage(top, lower);
+              myAPI.addHistory(top, lower);
             }}
           >
             save
@@ -173,56 +174,56 @@ export const Seal = () => {
           >
             <canvas className="canvas" width="60" height="60" ref={canvasRef} />
           </div>
-          <Disclosure>
-            {({ open }) => (
-              /* Use the `open` state to conditionally change the direction of an icon. */
-              <>
-                <Disclosure.Button>
-                  <div className="flex flex-row items-center justify-center relative bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-400 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-400 dark:focus:ring-blue-800">
-                    history
-                    {open ? (
-                      <svg
-                        className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 8"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 8"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
-                        />
-                      </svg>
-                    )}
-                  </div>
-                  {/* <ChevronRightIcon className={open ? 'rotate-90 transform' : ''} /> */}
-                </Disclosure.Button>
-                <Disclosure.Panel>
-                  <StampHistory />
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
         </div>
+        <Disclosure>
+          {({ open }) => (
+            /* Use the `open` state to conditionally change the direction of an icon. */
+            <>
+              <Disclosure.Button>
+                <div className="flex flex-row items-center justify-center relative bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-400 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-400 dark:focus:ring-blue-800">
+                  history
+                  {open ? (
+                    <svg
+                      className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 8"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 8"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
+                      />
+                    </svg>
+                  )}
+                </div>
+                {/* <ChevronRightIcon className={open ? 'rotate-90 transform' : ''} /> */}
+              </Disclosure.Button>
+              <Disclosure.Panel>
+                <StampHistory />
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
       </div>
     </>
   );
