@@ -20,6 +20,7 @@ import {
   setShortcut,
 } from './store';
 
+// 印鑑の処理を行う関数
 const showNotification = () => {
   new Notification({
     title: '印鑑',
@@ -82,7 +83,8 @@ const createSubWindow = () => {
 
   return subWindow;
 };
-// to handle quitting
+
+// アプリケーションが終了する際に呼び出される関数
 const handleQuit = () => {
   isClose = true;
   if (process.platform !== 'darwin') {
@@ -90,6 +92,7 @@ const handleQuit = () => {
   }
 };
 
+// Electronの初期化が完了したら呼び出される関数
 app.whenReady().then(() => {
   /**
    * ショートカットキーの設定
@@ -190,14 +193,12 @@ app.whenReady().then(() => {
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// 全てのウィンドウが閉じられたときに呼び出される関数
 app.on('window-all-closed', (e: Event) => {});
 
+// アクティブなウィンドウがないときに呼び出される関数
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+  // OS Xでは、ドックアイコンをクリックしても他のウィンドウが開かれていない場合は、新たにウィンドウを生成する
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
