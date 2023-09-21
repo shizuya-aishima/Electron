@@ -43,9 +43,9 @@ const createWindow = () => {
   });
 
   mainWindow.loadURL(`file://${__dirname}/../dist/index.html#/`);
-  if (!app.isPackaged) {
-    mainWindow.webContents.openDevTools({ mode: 'detach' });
-  }
+  // if (!app.isPackaged) {
+  //   mainWindow.webContents.openDevTools({ mode: 'detach' });
+  // }
 
   mainWindow.on('close', (event) => {
     mainWindow.hide();

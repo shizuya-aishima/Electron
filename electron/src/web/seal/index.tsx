@@ -20,6 +20,8 @@ export const Seal = () => {
 
   React.useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext();
+    ctx.fillStyle = 'rgba(255,255,255,0)'; //青で不透明度0.3で塗り潰す
+    ctx.strokeRect(-50, -50, 150, 150); // 描画
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 2;
@@ -27,7 +29,7 @@ export const Seal = () => {
     ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
     ctx.font = "bold 14px 'メイリオ'";
     ctx.textAlign = 'center';
-    ctx.clearRect(0, 0, 150, 150);
+    // ctx.clearRect(0, 0, 150, 150);
     ctx.fillText(top, 30, 20);
     ctx.fillText(lower, 30, 51);
     ctx.moveTo(58, 24);
