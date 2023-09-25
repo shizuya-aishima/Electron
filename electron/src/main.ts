@@ -74,13 +74,6 @@ const createSubWindow = () => {
   //   subWindow.webContents.openDevTools({ mode: 'detach' });
   // }
 
-  subWindow.on('close', (event) => {
-    subWindow.hide();
-    if (!isClose) {
-      event.preventDefault();
-    }
-  });
-
   return subWindow;
 };
 
