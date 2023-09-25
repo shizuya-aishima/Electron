@@ -4,6 +4,7 @@ const { myAPI } = window;
 type CanvasProps = {
   top: string;
   lower: string;
+  onClick: (top: string, lower: string) => void;
 };
 
 /**
@@ -11,7 +12,7 @@ type CanvasProps = {
  * コンポーネントをクリックすると、CanvasをBase64エンコードされたイメージとしてバックエンドに送信します。
  */
 const Canvas = (props: CanvasProps) => {
-  const { top, lower } = props;
+  const { top, lower, onClick } = props;
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [date] = React.useState(new Date());
@@ -66,6 +67,7 @@ const Canvas = (props: CanvasProps) => {
    */
   const onClickHandler = () => {
     myAPI.sendImage(getImage());
+    onClick(top, lower);
   };
   return (
     <div
@@ -77,10 +79,14 @@ const Canvas = (props: CanvasProps) => {
   );
 };
 
+type StampHistoryProps = {
+  onClick: (top: string, lower: string) => void;
+};
 /**
  * スタンプ履歴を表示するコンポーネントです。
  */
-const StampHistory = () => {
+const StampHistory = (props: StampHistoryProps) => {
+  const { onClick } = props;
   const [state, setState] = React.useState<{ top: string; lower: string }[]>(
     [],
   );
@@ -105,7 +111,12 @@ const StampHistory = () => {
   return (
     <div className="mt-2 gap-2 flex flex-row bg-gray-400 flex-wrap">
       {state.map(({ top, lower }, i) => (
-        <Canvas key={i + top + lower} top={top} lower={lower} />
+        <Canvas
+          key={i + top + lower}
+          top={top}
+          lower={lower}
+          onClick={onClick}
+        />
       ))}
     </div>
   );

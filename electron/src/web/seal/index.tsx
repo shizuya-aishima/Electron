@@ -79,6 +79,11 @@ export const Seal = () => {
     myAPI.openSettings();
   };
 
+  const onClickHistory = (top: string, lower: string) => {
+    setTop(top);
+    setLower(lower);
+  };
+
   return (
     <>
       <div className="grid gap-6 mb-6 md:grid-cols-1 ">
@@ -245,7 +250,7 @@ export const Seal = () => {
                 {/* <ChevronRightIcon className={open ? 'rotate-90 transform' : ''} /> */}
               </Disclosure.Button>
               <Disclosure.Panel>
-                <StampHistory />
+                <StampHistory onClick={onClickHistory} />
               </Disclosure.Panel>
             </>
           )}
