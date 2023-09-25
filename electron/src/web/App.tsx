@@ -7,10 +7,12 @@ import { Setting } from './settings';
 export const App = () => {
   return (
     <HashRouter>
-      <Routes>
-        <Route path="/" element={<Seal />} />
-        <Route path="/sub" element={<Setting />} />
-      </Routes>
+      <div className="h-full bg-gray-400">
+        <Routes>
+          <Route path="/" element={<Seal />} />
+          <Route path="/sub" element={<Setting />} />
+        </Routes>
+      </div>
     </HashRouter>
   );
 };
