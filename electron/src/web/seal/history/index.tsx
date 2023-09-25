@@ -4,6 +4,7 @@ const { myAPI } = window;
 type CanvasProps = {
   top: string;
   lower: string;
+  alpha: boolean;
   onClick: (top: string, lower: string) => void;
 };
 
@@ -12,7 +13,7 @@ type CanvasProps = {
  * コンポーネントをクリックすると、CanvasをBase64エンコードされたイメージとしてバックエンドに送信します。
  */
 const Canvas = (props: CanvasProps) => {
-  const { top, lower, onClick } = props;
+  const { top, lower, alpha, onClick } = props;
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [date] = React.useState(new Date());
@@ -30,6 +31,12 @@ const Canvas = (props: CanvasProps) => {
    */
   const write = (top: string, lower: string) => {
     const ctx = getContext();
+    ctx.fillStyle = 'rgba(255,255,255,1)'; //青で不透明度0.3で塗り潰す
+    ctx.fillRect(-50, -50, 150, 150); // 描画
+    if (alpha) {
+      ctx.beginPath();
+      ctx.clearRect(0, 0, 150, 150);
+    }
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 2;
@@ -37,7 +44,6 @@ const Canvas = (props: CanvasProps) => {
     ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
     ctx.font = "bold 14px 'メイリオ'";
     ctx.textAlign = 'center';
-    ctx.clearRect(0, 0, 150, 150);
     ctx.fillText(top, 30, 20);
     ctx.fillText(lower, 30, 51);
     ctx.moveTo(58, 24);
@@ -81,12 +87,13 @@ const Canvas = (props: CanvasProps) => {
 
 type StampHistoryProps = {
   onClick: (top: string, lower: string) => void;
+  alpha: boolean;
 };
 /**
  * スタンプ履歴を表示するコンポーネントです。
  */
 const StampHistory = (props: StampHistoryProps) => {
-  const { onClick } = props;
+  const { onClick, alpha } = props;
   const [state, setState] = React.useState<{ top: string; lower: string }[]>(
     [],
   );
@@ -112,6 +119,7 @@ const StampHistory = (props: StampHistoryProps) => {
     <div className="mt-2 gap-2 flex flex-row bg-gray-400 flex-wrap">
       {state.map(({ top, lower }, i) => (
         <Canvas
+          alpha={alpha}
           key={i + top + lower}
           top={top}
           lower={lower}

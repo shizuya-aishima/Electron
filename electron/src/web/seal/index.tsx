@@ -21,12 +21,9 @@ export const Seal = () => {
 
   React.useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext();
-    // ctx.clearRect(0, 0, 150, 150);
     ctx.fillStyle = 'rgba(255,255,255,1)'; //青で不透明度0.3で塗り潰す
     ctx.fillRect(-50, -50, 150, 150); // 描画
     if (alpha) {
-      // ctx.fillStyle = 'rgba(255,255,255,0)'; //青で不透明度0.3で塗り潰す
-      // ctx.fillRect(-50, -50, 150, 150); // 描画
       ctx.beginPath();
       ctx.clearRect(0, 0, 150, 150);
     }
@@ -250,7 +247,7 @@ export const Seal = () => {
                 {/* <ChevronRightIcon className={open ? 'rotate-90 transform' : ''} /> */}
               </Disclosure.Button>
               <Disclosure.Panel>
-                <StampHistory onClick={onClickHistory} />
+                <StampHistory onClick={onClickHistory} alpha={alpha} />
               </Disclosure.Panel>
             </>
           )}
