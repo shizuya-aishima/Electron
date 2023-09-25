@@ -25,8 +25,10 @@ export const Seal = () => {
     ctx.fillStyle = 'rgba(255,255,255,1)'; //青で不透明度0.3で塗り潰す
     ctx.fillRect(-50, -50, 150, 150); // 描画
     if (alpha) {
-      ctx.fillStyle = 'rgba(255,255,255,0)'; //青で不透明度0.3で塗り潰す
-      ctx.fillRect(-50, -50, 150, 150); // 描画
+      // ctx.fillStyle = 'rgba(255,255,255,0)'; //青で不透明度0.3で塗り潰す
+      // ctx.fillRect(-50, -50, 150, 150); // 描画
+      ctx.beginPath();
+      ctx.clearRect(0, 0, 150, 150);
     }
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
@@ -46,7 +48,7 @@ export const Seal = () => {
     ctx.textAlign = 'center';
     ctx.fillText(date.toLocaleDateString(), 30, 33);
     ctx.stroke();
-  }, [top, lower, date]);
+  }, [top, lower, date, alpha]);
 
   React.useEffect(() => {
     const test = async () => {
