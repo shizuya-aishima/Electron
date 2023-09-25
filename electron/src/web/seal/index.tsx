@@ -17,14 +17,17 @@ export const Seal = () => {
   const [top, setTop] = React.useState('');
   const [date, setDate] = React.useState(new Date());
   const [lower, setLower] = React.useState('');
+  const [alpha, setAlpha] = React.useState(false);
 
   React.useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext();
     // ctx.clearRect(0, 0, 150, 150);
     ctx.fillStyle = 'rgba(255,255,255,1)'; //青で不透明度0.3で塗り潰す
     ctx.fillRect(-50, -50, 150, 150); // 描画
-    ctx.fillStyle = 'rgba(255,255,255,0)'; //青で不透明度0.3で塗り潰す
-    ctx.fillRect(-50, -50, 150, 150); // 描画
+    if (alpha) {
+      ctx.fillStyle = 'rgba(255,255,255,0)'; //青で不透明度0.3で塗り潰す
+      ctx.fillRect(-50, -50, 150, 150); // 描画
+    }
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 2;
@@ -154,6 +157,23 @@ export const Seal = () => {
               value={lower}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+          </div>
+          <div className="flex items-center mb-4">
+            <input
+              id="default-checkbox"
+              type="checkbox"
+              value=""
+              onClick={(e) => {
+                setAlpha(!alpha);
+              }}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              htmlFor="default-checkbox"
+              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              透明化
+            </label>
           </div>
           <button
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
