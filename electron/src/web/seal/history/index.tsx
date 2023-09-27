@@ -115,16 +115,44 @@ const StampHistory = (props: StampHistoryProps) => {
     };
   }, [myAPI]);
 
+  const deleteButton = (index: number) => {
+    myAPI.deleteHistory(index);
+  };
+
   return (
     <div className="mt-2 gap-2 flex flex-row bg-gray-400 flex-wrap">
       {state.map(({ top, lower }, i) => (
-        <Canvas
-          alpha={alpha}
-          key={i + top + lower}
-          top={top}
-          lower={lower}
-          onClick={onClick}
-        />
+        <div className="flex flex-col items-center flex-auto">
+          <Canvas
+            alpha={alpha}
+            key={i + top + lower}
+            top={top}
+            lower={lower}
+            onClick={onClick}
+          />
+          <button
+            type="button"
+            className="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:focus:ring-red-800 dark:hover:bg-red-500"
+            onClick={() => deleteButton(i)}
+          >
+            <svg
+              className="w-[8px] h-[8px] text-red-800 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span className="sr-only">Icon description</span>
+          </button>
+        </div>
       ))}
     </div>
   );

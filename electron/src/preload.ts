@@ -43,6 +43,11 @@ contextBridge.exposeInMainWorld('myAPI', {
   addHistory: (top: string, lower: string) => {
     ipcRenderer.send(IPCKeys.ADD_HISTORY, top, lower);
   },
+
+  // 履歴の削除
+  deleteHistory: (index: number) => {
+    ipcRenderer.send(IPCKeys.DELETE_HISTORY, index);
+  },
   // main -> renderer
   // getHistory: async (): Promise<{ top: string; lower: string }[]> => {
   //   return await ipcRenderer.invoke(IPCKeys.GET_HISTORY);

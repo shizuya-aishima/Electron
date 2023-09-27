@@ -40,3 +40,11 @@ export const getHistory = () => {
     | undefined;
   return backHistory || [];
 };
+
+export const deleteHistory = (index: number) => {
+  const backHistory = getHistory();
+  store.set(
+    'history',
+    backHistory.filter((_history, i) => i !== index),
+  );
+};
