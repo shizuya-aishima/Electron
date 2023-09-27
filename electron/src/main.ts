@@ -13,6 +13,7 @@ import path from 'path';
 import { IPCKeys } from './constants';
 import {
   createHistory,
+  deleteHistory,
   getHistory,
   getShortcut,
   getStamp,
@@ -207,10 +208,17 @@ if (!gotTheLock) {
     reloadGlobalHotkeySettings(window);
 
     /**
-     * Stampの上段下段の保存
+     * 履歴の追加
      */
     ipcMain.on(IPCKeys.ADD_HISTORY, (event, top, lower) => {
       createHistory(top, lower);
+      window.webContents.send(IPCKeys.GET_HISTORY, getHistory());
+    });
+    /**
+     * 履歴の削除
+     */
+    ipcMain.on(IPCKeys.DELETE_HISTORY, (event, index) => {
+      deleteHistory(index);
       window.webContents.send(IPCKeys.GET_HISTORY, getHistory());
     });
 

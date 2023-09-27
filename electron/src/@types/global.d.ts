@@ -15,6 +15,7 @@ export interface IMyAPI {
   sendImage: (image: string) => void;
   onReceiveMessage: (listener: (message: string) => void) => () => void;
   addHistory: (top: string, lower: string) => void;
+  deleteHistory: (index: number) => void;
   getHistory: (
     listener: (
       message: {

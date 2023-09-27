@@ -10,4 +10,5 @@ export const IPCKeys = {
   GET_HISTORY: 'getHistory',
   GET_HISTORY_ONCE: 'getHistoryOnce',
   ADD_HISTORY: 'addHistory',
+  DELETE_HISTORY: 'deleteHistory',
 } as const;
