@@ -26,7 +26,12 @@ export const getShortcut = () => {
   };
 };
 
-export const createHistory = (top: string, lower: string) => {
+export const addHistory = (
+  top: string,
+  lower: string,
+  shortcut1?: string,
+  shortcut2?: string,
+) => {
   const backHistory = getHistory();
   if (
     backHistory.some(
@@ -34,12 +39,17 @@ export const createHistory = (top: string, lower: string) => {
     )
   )
     return;
-  store.set('history', backHistory.concat([{ top, lower }]));
+  store.set(
+    'history',
+    backHistory.concat([
+      { top, lower, shortcut1: shortcut1 || '', shortcut2: shortcut2 || '' },
+    ]),
+  );
 };
 
 export const getHistory = () => {
   const backHistory = store.get('history') as
-    | { top: string; lower: string }[]
+    | { top: string; lower: string; shortcut1: string; shortcut2: string }[]
     | undefined;
   return backHistory || [];
 };
@@ -50,4 +60,15 @@ export const deleteHistory = (index: number) => {
     'history',
     backHistory.filter((_history, i) => i !== index),
   );
+};
+
+export const createHistory = (
+  history: {
+    top: string;
+    lower: string;
+    shortcut1: string;
+    shortcut2: string;
+  }[],
+) => {
+  store.set('history', history);
 };

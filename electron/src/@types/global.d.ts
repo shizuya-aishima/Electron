@@ -8,23 +8,60 @@ declare global {
 }
 export interface IMyAPI {
   sendMessage: (top: string, lower: string) => void;
-  setShortcut: (shortcut1: string, shortcut2: string) => void;
+  setShortcut: (
+    shortcut1: string,
+    shortcut2: string,
+    history: {
+      top: string;
+      lower: string;
+      shortcut1: string;
+      shortcut2: string;
+    }[],
+  ) => void;
   getShortcut: () => Promise<{ shortcut1?: string; shortcut2?: string }>;
   loadMessage: () => Promise<{ top: string; lower: string }>;
   openSettings: () => void;
   sendImage: (image: string) => void;
-  onReceiveMessage: (listener: (message: string) => void) => () => void;
-  addHistory: (top: string, lower: string) => void;
+  onReceiveMessage: (
+    listener: (
+      message:
+        | {
+            top: string;
+            lower: string;
+            shortcut1?: string;
+            shortcut2?: string;
+          }
+        | undefined,
+    ) => void,
+  ) => () => void;
+  addHistory: (
+    top: string,
+    lower: string,
+    shortcut1?: string,
+    shortcut2?: string,
+  ) => void;
   deleteHistory: (index: number) => void;
   getHistory: (
     listener: (
       message: {
         top: string;
         lower: string;
+        shortcut1: string;
+        shortcut2: string;
       }[],
     ) => void,
   ) => () => void;
-  getHistoryOnce: () => Promise<{ top: string; lower: string }[]>;
+  getHistoryOnce: () => Promise<
+    { top: string; lower: string; shortcut1: string; shortcut2: string }[]
+  >;
+  createHistory: (
+    data: {
+      top: string;
+      lower: string;
+      shortcut1?: string;
+      shortcut2?: string;
+    }[],
+  ) => void;
 }
 
 export interface HistoryAPI {

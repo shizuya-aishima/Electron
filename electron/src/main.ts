@@ -12,6 +12,7 @@ import {
 import path from 'path';
 import { IPCKeys } from './constants';
 import {
+  addHistory,
   createHistory,
   deleteHistory,
   getHistory,
@@ -121,6 +122,14 @@ if (!gotTheLock) {
       win: BrowserWindow,
       tmpShortcut1?: string,
       tmpShortcut2?: string,
+      history:
+        | {
+            top: string;
+            lower: string;
+            shortcut1?: string;
+            shortcut2?: string;
+          }[]
+        | undefined = [],
     ) => {
       const store = getShortcut();
       if (tmpShortcut1) {
@@ -130,13 +139,27 @@ if (!gotTheLock) {
       const shortcut2 = tmpShortcut2 ?? store.shortcut2;
       globalShortcut.unregisterAll();
       globalShortcut.register(
-        `CommandOrControl+${shortcut1 || 'b'}${
-          shortcut2 ? '+' : ''
-        }${shortcut2}`,
+        `CommandOrControl+${shortcut1 || 'b'}${shortcut2 ? '+' : ''}${
+          shortcut2 || ''
+        }`,
         () => {
-          win.webContents.send(IPCKeys.RECEIVE_MESSAGE, 'test message');
+          win.webContents.send(IPCKeys.RECEIVE_MESSAGE, undefined);
         },
       );
+      if (history.length === 0) {
+        history = getHistory();
+      }
+      history.forEach((item) => {
+        if (item.shortcut1)
+          globalShortcut.register(
+            `CommandOrControl+${item.shortcut1 || 'b'}${
+              item.shortcut2 ? '+' : ''
+            }${item.shortcut2 || ''}`,
+            () => {
+              win.webContents.send(IPCKeys.RECEIVE_MESSAGE, item);
+            },
+          );
+      });
     };
 
     /**
@@ -187,9 +210,20 @@ if (!gotTheLock) {
     mainWindow = window;
     ipcMain.on(
       IPCKeys.SET_SHORTCUT,
-      (event, shortcut1: string, shortcut2: string) => {
+      (
+        event,
+        shortcut1: string,
+        shortcut2: string,
+        history: {
+          top: string;
+          lower: string;
+          shortcut1: string;
+          shortcut2: string;
+        }[],
+      ) => {
         setShortcut(shortcut1, shortcut2);
-        reloadGlobalHotkeySettings(window, shortcut1, shortcut2);
+        createHistory(history);
+        reloadGlobalHotkeySettings(window, shortcut1, shortcut2, history);
       },
     );
 
@@ -211,7 +245,7 @@ if (!gotTheLock) {
      * 履歴の追加
      */
     ipcMain.on(IPCKeys.ADD_HISTORY, (event, top, lower) => {
-      createHistory(top, lower);
+      addHistory(top, lower, '', '');
       window.webContents.send(IPCKeys.GET_HISTORY, getHistory());
     });
     /**
@@ -219,6 +253,14 @@ if (!gotTheLock) {
      */
     ipcMain.on(IPCKeys.DELETE_HISTORY, (event, index) => {
       deleteHistory(index);
+      window.webContents.send(IPCKeys.GET_HISTORY, getHistory());
+    });
+
+    /**
+     * 履歴を洗替
+     */
+    ipcMain.on(IPCKeys.CREATE_HISTORY, (event, history) => {
+      createHistory(history);
       window.webContents.send(IPCKeys.GET_HISTORY, getHistory());
     });
 

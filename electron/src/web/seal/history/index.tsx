@@ -1,4 +1,5 @@
 import React from 'react';
+import { canvasWrite } from '../../components/seal';
 
 const { myAPI } = window;
 type CanvasProps = {
@@ -12,7 +13,7 @@ type CanvasProps = {
  * 円の中にテキストを描画するCanvasを表示するコンポーネントです。
  * コンポーネントをクリックすると、CanvasをBase64エンコードされたイメージとしてバックエンドに送信します。
  */
-const Canvas = (props: CanvasProps) => {
+export const Canvas = (props: CanvasProps) => {
   const { top, lower, alpha, onClick } = props;
 
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -31,30 +32,7 @@ const Canvas = (props: CanvasProps) => {
    */
   const write = (top: string, lower: string) => {
     const ctx = getContext();
-    ctx.fillStyle = 'rgba(255,255,255,1)'; //青で不透明度0.3で塗り潰す
-    ctx.fillRect(-50, -50, 150, 150); // 描画
-    if (alpha) {
-      ctx.beginPath();
-      ctx.clearRect(0, 0, 150, 150);
-    }
-    ctx.fillStyle = 'red';
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
-    ctx.font = "bold 14px 'メイリオ'";
-    ctx.textAlign = 'center';
-    ctx.fillText(top, 30, 20);
-    ctx.fillText(lower, 30, 51);
-    ctx.moveTo(58, 24);
-    ctx.lineTo(2, 24);
-    ctx.moveTo(58, 36);
-    ctx.lineTo(2, 36);
-
-    ctx.font = '10px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(date.toLocaleDateString(), 30, 33);
-    ctx.stroke();
+    canvasWrite(ctx, top, lower, date, alpha);
   };
 
   React.useEffect(() => {
@@ -75,9 +53,24 @@ const Canvas = (props: CanvasProps) => {
     myAPI.sendImage(getImage());
     onClick(top, lower);
   };
+
+  React.useEffect(() => {
+    // イベントリスナーを追加
+    const removeListener = myAPI.onReceiveMessage((message) => {
+      console.log(message);
+      if (message && message.top === top && message.lower === lower) {
+        console.log(getImage());
+        myAPI.sendImage(getImage());
+      }
+    });
+    // コンポーネントのクリーンアップ処理でイベントリスナーを削除する
+    return () => {
+      removeListener();
+    };
+  }, []);
   return (
     <div
-      className="mx-auto items-center flex justify-center mb-4 bg-white p-2"
+      className="mx-auto items-center flex justify-center bg-white p-2 my-1"
       onClick={onClickHandler}
     >
       <canvas className="canvas" width="60" height="60" ref={canvasRef} />

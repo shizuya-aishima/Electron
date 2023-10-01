@@ -1,6 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import React from 'react';
 import StampHistory from './history';
+import { canvasWrite } from '../components/seal';
 
 const { myAPI } = window;
 export const Seal = () => {
@@ -18,33 +19,11 @@ export const Seal = () => {
   const [date, setDate] = React.useState(new Date());
   const [lower, setLower] = React.useState('');
   const [alpha, setAlpha] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext();
-    ctx.fillStyle = 'rgba(255,255,255,1)'; //青で不透明度0.3で塗り潰す
-    ctx.fillRect(-50, -50, 150, 150); // 描画
-    if (alpha) {
-      ctx.beginPath();
-      ctx.clearRect(0, 0, 150, 150);
-    }
-    ctx.fillStyle = 'red';
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(30, 30, 28, 0, Math.PI * 2, true); // 外の円
-    ctx.font = "bold 14px 'メイリオ'";
-    ctx.textAlign = 'center';
-    ctx.fillText(top, 30, 20);
-    ctx.fillText(lower, 30, 51);
-    ctx.moveTo(58, 24);
-    ctx.lineTo(2, 24);
-    ctx.moveTo(58, 36);
-    ctx.lineTo(2, 36);
-
-    ctx.font = '10px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(date.toLocaleDateString(), 30, 33);
-    ctx.stroke();
+    canvasWrite(ctx, top, lower, date, alpha);
   }, [top, lower, date, alpha]);
 
   React.useEffect(() => {
@@ -60,7 +39,10 @@ export const Seal = () => {
     // イベントリスナーを追加
     const removeListener = myAPI.onReceiveMessage((message) => {
       console.log(message);
-      myAPI.sendImage(getImage());
+      if (message == null) {
+        console.log(getImage());
+        myAPI.sendImage(getImage());
+      }
     });
     // コンポーネントのクリーンアップ処理でイベントリスナーを削除する
     return () => {
@@ -202,56 +184,60 @@ export const Seal = () => {
           >
             <canvas className="canvas" width="60" height="60" ref={canvasRef} />
           </div>
+          <Disclosure>
+            {({ open }) => {
+              setOpen(open);
+              return (
+                /* Use the `open` state to conditionally change the direction of an icon. */
+                <>
+                  <Disclosure.Button>
+                    <div className="flex flex-row items-center justify-center relative bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-400 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-400 dark:focus:ring-blue-800">
+                      history
+                      {open ? (
+                        <svg
+                          className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 14 8"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 14 8"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    {/* <ChevronRightIcon className={open ? 'rotate-90 transform' : ''} /> */}
+                  </Disclosure.Button>
+                  <Disclosure.Panel></Disclosure.Panel>
+                </>
+              );
+            }}
+          </Disclosure>
+          <div hidden={!open}>
+            <StampHistory onClick={onClickHistory} alpha={alpha} />
+          </div>
         </div>
-        <Disclosure>
-          {({ open }) => (
-            /* Use the `open` state to conditionally change the direction of an icon. */
-            <>
-              <Disclosure.Button>
-                <div className="flex flex-row items-center justify-center relative bg-gray-50 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-300 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-400 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-400 dark:focus:ring-blue-800">
-                  history
-                  {open ? (
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 8"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white absolute right-4"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 8"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
-                      />
-                    </svg>
-                  )}
-                </div>
-                {/* <ChevronRightIcon className={open ? 'rotate-90 transform' : ''} /> */}
-              </Disclosure.Button>
-              <Disclosure.Panel>
-                <StampHistory onClick={onClickHistory} alpha={alpha} />
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
       </div>
     </>
   );
